@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Baking Mood</title>
+  <style>
+    body {
+      font-family: system-ui;
+      max-width: 600px;
+      margin: 60px auto;
+    }
+
+    input, button {
+      padding: 10px;
+      width: 100%;
+      margin-top: 10px;
+    }
+
+    .recipe {
+      margin-top: 20px;
+      padding: 10px;
+      border: 1px solid #ddd;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>What are you in the mood to bake?</h1>
+
+  <input id="mood" placeholder="cozy chocolate something easy..." />
+
+  <button onclick="search()">Find recipes</button>
+  <button onclick="random()">Surprise me</button>
+
+  <div id="results"></div>
+
+<script>
+async function search(random=false) {
+  const mood = document.getElementById("mood").value;
+
+  const res = await fetch("/api/search", {
+    method: "POST",
+    headers: { "Content-Type": "application/json" },
+    body: JSON.stringify({ mood, random })
+  });
+
+  const data = await res.json();
+
+  document.getElementById("results").innerHTML =
+    data.recipes.map(r =>
+      `<div class="recipe">
+        <h3>${r.title}</h3>
+        <a href="${r.url}" target="_blank">View recipe</a>
+      </div>`
+    ).join("");
+}
+
+function random() {
+  search(true);
+}
+</script>
+</body>
+</html>

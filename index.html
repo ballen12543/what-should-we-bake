@@ -43,10 +43,10 @@ async function search(random=false) {
     body: JSON.stringify({ mood, random })
   });
 
-  const data = await res.json();
-
-  document.getElementById("results").innerHTML =
-    data.recipes.map(r =>
+const data = await res.json();
+console.log("API response:", data);  // Add this line
+document.getElementById("results").innerHTML =
+  data.recipes.map(r =>
       `<div class="recipe">
         <h3>${r.title}</h3>
         <a href="${r.url}" target="_blank">View recipe</a>

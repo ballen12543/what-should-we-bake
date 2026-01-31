@@ -36,27 +36,25 @@
 <script>
 async function search(random=false) {
   const mood = document.getElementById("mood").value;
-
   const res = await fetch("/api/search", {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ mood, random })
   });
-
-const data = await res.json();
-console.log("API response:", data);  // Add this line
-document.getElementById("results").innerHTML =
-  data.recipes.map(r =>
+  const data = await res.json();
+  console.log("Full response:", data);  // Add this
+  
+  if (data.error) {  // Add error handling
+    document.getElementById("results").innerHTML = 
+      `<div class="recipe">Error: ${data.error}</div>`;
+    return;
+  }
+  
+  document.getElementById("results").innerHTML =
+    data.recipes.map(r =>
       `<div class="recipe">
         <h3>${r.title}</h3>
         <a href="${r.url}" target="_blank">View recipe</a>
       </div>`
     ).join("");
 }
-
-function random() {
-  search(true);
-}
-</script>
-</body>
-</html>
